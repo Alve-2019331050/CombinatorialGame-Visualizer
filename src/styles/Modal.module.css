@@ -1,0 +1,26 @@
+.title {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  font-size: 160%;
+  color: #080326;
+}
+
+.p {
+  margin: 0px 0px;
+}
+
+.h4 {
+  margin-top: 3%;
+}
+
+.description {
+  margin-bottom: 5%;
+  font-weight: 400;
+  padding: 0% 3%;
+  font-size: 18px;
+  color: #080326;
+}
