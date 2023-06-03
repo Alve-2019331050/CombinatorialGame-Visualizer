@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import classes from "../styles/Modal.module.css";
 
 export default function MyModal(props) {
@@ -55,9 +55,9 @@ export default function MyModal(props) {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button className=".btn" onClick={props.onHide}>
+        <button className="btn" onClick={props.onHide}>
           Close
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   );

@@ -1,0 +1,27 @@
+.dialog {
+  position: fixed;
+  margin: auto;
+  width: 60vw;
+  right: 0%;
+  height: 100%;
+  transform: translate3d(0%, 0, 0);
+}
+
+.content {
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 0;
+  border: none;
+  background-color: rgba(14, 71, 107, 0.87);
+  color: white;
+}
+
+.body {
+  padding: 6% 6%;
+  font-weight: bold;
+}
+
+.startButton {
+  margin-top: 30%;
+  margin-left: 19vw;
+}

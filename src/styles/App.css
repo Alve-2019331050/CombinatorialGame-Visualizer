@@ -4,14 +4,20 @@
   padding: 0;
 }
 
+body {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
 .btn {
-  background-color: #0e9474 !important;
+  background-color: #0e9474;
   border-radius: 8%/20%;
-  border-color: #0e9474 !important;
+  border-color: #0e9474;
+  color: white;
   font-weight: bold;
 }
 
 .btn:hover {
-  background-color: #51af99 !important;
-  border-color: #0e9474 !important;
+  background-color: #51af99;
+  color: white;
+  border-color: #0e9474;
 }

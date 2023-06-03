@@ -1,44 +1,84 @@
+import {
+  MDBCollapse,
+  MDBContainer,
+  MDBDropdown,
+  MDBDropdownItem,
+  MDBDropdownMenu,
+  MDBDropdownToggle,
+  MDBIcon,
+  MDBNavbar,
+  MDBNavbarBrand,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBNavbarNav,
+  MDBNavbarToggler,
+} from "mdb-react-ui-kit";
 import { useState } from "react";
-import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import classes from "../styles/Nav.module.css";
-import Modal from "./Modal";
 
-export default function Mynav() {
-  const [modalShow, setModalShow] = useState(true);
-  const handleShow = () => {
-    setModalShow(true);
+export default function Mynav({ game, handleShow, setGame, setSideBar }) {
+  const [showNav, setShowNav] = useState(false);
+  const handleGameChange = (e) => {
+    setGame(e.target.innerText);
   };
 
-  const handleHide = () => {
-    setModalShow(false);
+  const handleSidebar = () => {
+    setSideBar(true);
   };
+
   return (
     <>
-      <Navbar expand="lg" className={classes.nav} variant="dark">
-        <Container>
-          <Navbar.Brand>Combinatorial Game Visualizer</Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar-nav" />
-          <Navbar.Collapse id="navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link onClick={() => handleShow()}>Instructions</Nav.Link>
-              <Nav.Link href="#link">Rules</Nav.Link>
-              <NavDropdown title="Games" id="game">
-                <NavDropdown.Item href="#action/3.1">Nim</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Misere Nim
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  StairCase Nim
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <Nav>
-              <Button className="btn">Configure</Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Modal show={modalShow} onHide={() => handleHide()}></Modal>
+      <MDBNavbar expand="lg" dark className={classes.nav}>
+        <MDBContainer>
+          <MDBNavbarBrand>Combinatorial Game Visualizer</MDBNavbarBrand>
+          <MDBNavbarToggler
+            type="button"
+            aria-expanded="true"
+            onClick={() => setShowNav(!showNav)}
+          >
+            <MDBIcon icon="bars" fas />
+          </MDBNavbarToggler>
+          <MDBCollapse show={showNav} navbar>
+            <MDBNavbarNav className="me-auto mb-2 mb-lg-0">
+              <MDBNavbarItem>
+                <MDBNavbarLink onClick={() => handleShow()}>
+                  Instructions
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink href="#link">Rules</MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBDropdown>
+                  <MDBDropdownToggle tag="a" className="nav-link" role="button">
+                    {game}
+                  </MDBDropdownToggle>
+                  <MDBDropdownMenu>
+                    <MDBDropdownItem link onClick={handleGameChange}>
+                      Nim
+                    </MDBDropdownItem>
+                    <MDBDropdownItem link onClick={handleGameChange}>
+                      Misere Nim
+                    </MDBDropdownItem>
+                    <MDBDropdownItem link onClick={handleGameChange}>
+                      StairCase Nim
+                    </MDBDropdownItem>
+                  </MDBDropdownMenu>
+                </MDBDropdown>
+              </MDBNavbarItem>
+            </MDBNavbarNav>
+            <MDBNavbarNav>
+              <button
+                disabled={game == "Games"}
+                className={`btn ${classes.btn}`}
+                onClick={handleSidebar}
+              >
+                Configure
+              </button>
+            </MDBNavbarNav>
+          </MDBCollapse>
+        </MDBContainer>
+      </MDBNavbar>
     </>
   );
 }
