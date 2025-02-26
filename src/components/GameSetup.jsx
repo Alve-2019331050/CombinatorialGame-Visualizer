@@ -59,7 +59,6 @@ const PileConfig = ({ index, stones, onStoneChange, onRemove, maxStones = 15 }) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
       p={4}
       bg={bgColor}
       borderRadius="xl"
@@ -68,7 +67,7 @@ const PileConfig = ({ index, stones, onStoneChange, onRemove, maxStones = 15 }) 
       borderColor={borderColor}
       position="relative"
       _hover={{ transform: 'translateY(-2px)', boxShadow: 'xl' }}
-      transition="all 0.2s"
+      _transition="all 0.2s"
     >
       <VStack spacing={4}>
         <HStack spacing={4} align="center" w="full">

@@ -31,7 +31,7 @@ const StoneIcon = ({ isSelected, isDisabled, onClick }) => {
       cursor={isDisabled ? 'not-allowed' : 'pointer'}
       onClick={!isDisabled ? onClick : undefined}
       opacity={isDisabled ? 0.5 : 1}
-      transition="all 0.2s"
+      _transition="all 0.2s"
     >
       <Icon
         as={GiStoneStack}
@@ -56,7 +56,6 @@ const PileDisplay = ({ index, stones, selectedStones, onStoneClick, isActive, cu
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
       p={6}
       bg={bgColor}
       borderRadius="xl"
@@ -65,7 +64,7 @@ const PileDisplay = ({ index, stones, selectedStones, onStoneClick, isActive, cu
       borderColor={isActive ? activeBorderColor : borderColor}
       position="relative"
       _hover={{ transform: stones > 0 && currentPlayer === 'player' ? 'translateY(-2px)' : 'none' }}
-      transition="all 0.2s"
+      _transition="all 0.2s"
       opacity={stones === 0 || currentPlayer !== 'player' ? 0.6 : 1}
       cursor={stones === 0 || currentPlayer !== 'player' ? 'not-allowed' : 'pointer'}
     >

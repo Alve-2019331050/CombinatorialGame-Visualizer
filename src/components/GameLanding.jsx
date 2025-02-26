@@ -178,7 +178,7 @@ const GameLanding = ({ onGameSelect }) => {
       value: 'staircase',
       title: 'Staircase Nim',
       description: 'A unique variant with directional constraints',
-      rules: 'Remove stones only from left to right in each pile. The player who takes the last stone wins.',
+      rules: 'Removed stones get added to the previous piles (if any). The player who takes the last stone wins.',
       strategy: 'Control the flow by managing the staircase pattern.',
     },
   ];

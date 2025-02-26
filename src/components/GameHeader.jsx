@@ -35,7 +35,7 @@ const GameHeader = ({ gameType, currentPlayer, onReset }) => {
       as={motion.div}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      _transition={{ duration: 0.5 }}
       p={6}
       bg={bgColor}
       borderRadius="xl"
