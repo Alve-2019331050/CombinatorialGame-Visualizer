@@ -13,310 +13,257 @@ import {
   useColorModeValue,
   IconButton,
   Tooltip,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
   Grid,
   GridItem,
-  useBreakpointValue,
-  Badge,
-  Container,
   Icon,
+  Container,
+  Flex,
+  Divider,
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlus, FaMinus, FaDice, FaInfoCircle, FaArrowRight } from 'react-icons/fa';
-import { GiStoneStack } from 'react-icons/gi';
+import { FaPlus, FaMinus, FaPlay, FaDice, FaRandom } from 'react-icons/fa';
+import { 
+  GiStoneStack,
+  GiWoodenCrate,
+  GiTreasureMap,
+  GiScrollUnfurled,
+  GiWoodenSign,
+  GiAbacus,
+  GiDiceTwentyFacesTwenty,
+} from 'react-icons/gi';
 import { useState } from 'react';
+
+const MotionBox = motion(Box);
 
 // Game rules helper
 const getGameRules = (gameType) => {
-  const rules = {
-    nim: {
-      description: "Remove any number of stones from a single pile. The player who takes the last stone wins.",
-      strategy: "Try to leave your opponent with a nim-sum of zero.",
-    },
-    misere: {
-      description: "Remove any number of stones from a single pile. The player who takes the last stone loses.",
-      strategy: "Try to leave your opponent with a single pile of size 1.",
-    },
-    staircase: {
-      description: "Remove stones from left to right. The player who takes the last stone wins.",
-      strategy: "Focus on creating winning positions by controlling the step pattern.",
-    },
-  };
-  return rules[gameType] || rules.nim;
+  switch (gameType) {
+    case 'nim':
+      return {
+        title: "Classic Nim Setup",
+        description: "Configure your piles for the traditional Nim game. Each pile represents a collection of stones that players can remove from.",
+        icon: GiStoneStack,
+      };
+    case 'misere':
+      return {
+        title: "Misère Nim Setup",
+        description: "Set up your piles for Misère Nim, where the last player to take a stone loses. Choose your pile sizes wisely!",
+        icon: GiDiceTwentyFacesTwenty,
+      };
+    case 'staircase':
+      return {
+        title: "Staircase Nim Setup",
+        description: "Create your staircase formation. Remember, removed stones cascade to previous piles in this variant.",
+        icon: GiWoodenSign,
+      };
+    default:
+      return {
+        title: "Game Setup",
+        description: "Configure your game piles",
+        icon: GiStoneStack,
+      };
+  }
 };
 
 const PileConfig = ({ index, stones, onStoneChange, onRemove, maxStones = 15 }) => {
-  const bgColor = useColorModeValue('white', 'gray.700');
-  const stoneColor = useColorModeValue('teal.500', 'teal.300');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const bgColor = useColorModeValue('parchment.50', 'woodBrown.800');
+  const borderColor = useColorModeValue('woodBrown.200', 'woodBrown.700');
+  const textColor = useColorModeValue('woodBrown.700', 'parchment.100');
 
   return (
-    <Box
-      as={motion.div}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      p={4}
+    <MotionBox
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3 }}
       bg={bgColor}
+      p={6}
       borderRadius="xl"
-      boxShadow="lg"
-      borderWidth="1px"
+      borderWidth="2px"
       borderColor={borderColor}
+      boxShadow="lg"
       position="relative"
-      _hover={{ transform: 'translateY(-2px)', boxShadow: 'xl' }}
-      _transition="all 0.2s"
+      _before={{
+        content: '""',
+        position: 'absolute',
+        top: '1px',
+        left: '1px',
+        right: '1px',
+        height: '30%',
+        borderRadius: 'xl',
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%)',
+        pointerEvents: 'none',
+      }}
     >
       <VStack spacing={4}>
-        <HStack spacing={4} align="center" w="full">
-          <Badge
-            colorScheme="teal"
-            fontSize="md"
-            px={3}
-            py={1}
-            borderRadius="full"
-          >
+        <HStack justify="space-between" w="full">
+          <Heading size="md" color={textColor} fontFamily="heading">
             Pile {index + 1}
-          </Badge>
-          <Tooltip label="Remove pile" placement="top">
-            <IconButton
-              size="sm"
-              icon={<FaMinus />}
-              onClick={onRemove}
-              colorScheme="red"
-              variant="ghost"
-              ml="auto"
-            />
-          </Tooltip>
+          </Heading>
+          <IconButton
+            icon={<FaMinus />}
+            onClick={onRemove}
+            variant="ghost"
+            colorScheme="red"
+            aria-label="Remove pile"
+            _hover={{ transform: 'scale(1.1)' }}
+          />
         </HStack>
-        
-        <Box w="full" position="relative">
-          <VStack spacing={4}>
-            <HStack spacing={2} w="full" justify="center" minH="40px">
-              {[...Array(stones)].map((_, i) => (
-                <Box
-                  key={i}
-                  as={motion.div}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.2, delay: i * 0.05 }}
-                >
-                  <Icon as={GiStoneStack} boxSize={6} color={stoneColor} />
-                </Box>
-              ))}
-            </HStack>
-            
-            <Slider
-              value={stones}
-              min={1}
-              max={maxStones}
-              onChange={onStoneChange}
-              colorScheme="teal"
-            >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb boxSize={6}>
-                <Box color="teal.500" as={FaDice} />
-              </SliderThumb>
-            </Slider>
-            
-            <HStack spacing={4} w="full" justify="center">
+
+        <Box w="full">
+          <HStack spacing={4}>
+            <VStack flex={1} align="stretch">
               <NumberInput
                 value={stones}
+                onChange={(_, value) => onStoneChange(value)}
                 min={1}
                 max={maxStones}
-                onChange={(_, num) => onStoneChange(num)}
-                size="sm"
-                maxW={24}
+                size="lg"
               >
-                <NumberInputField textAlign="center" />
+                <NumberInputField 
+                  borderColor={borderColor}
+                  _hover={{ borderColor: 'accent.400' }}
+                  _focus={{ borderColor: 'accent.500', boxShadow: '0 0 0 1px var(--chakra-colors-accent-500)' }}
+                />
                 <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
+                  <NumberIncrementStepper borderColor={borderColor} color={textColor} />
+                  <NumberDecrementStepper borderColor={borderColor} color={textColor} />
                 </NumberInputStepper>
               </NumberInput>
-              <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
-                stones
-              </Text>
-            </HStack>
-          </VStack>
+            </VStack>
+            <VStack spacing={0} align="center" justify="center" h="full">
+              {[...Array(Math.min(stones, 5))].map((_, i) => (
+                <Icon
+                  key={i}
+                  as={GiStoneStack}
+                  boxSize={6 - i * 0.5}
+                  color={useColorModeValue('woodBrown.500', 'woodBrown.300')}
+                  transform={`translateY(-${i * 4}px)`}
+                />
+              ))}
+            </VStack>
+          </HStack>
         </Box>
       </VStack>
-    </Box>
+    </MotionBox>
   );
 };
 
 const GameSetup = ({ gameType, onStartGame }) => {
-  const [piles, setPiles] = useState([3, 5, 7]);
-  const maxPiles = 7;
+  const [piles, setPiles] = useState([{ stones: 3 }]);
+  const gameRules = getGameRules(gameType);
+  const maxPiles = 5;
   const maxStones = 15;
-  const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
-  const bgColor = useColorModeValue('gray.50', 'gray.800');
-  const cardBg = useColorModeValue('white', 'gray.700');
 
-  const handleAddPile = () => {
+  const addPile = () => {
     if (piles.length < maxPiles) {
-      setPiles([...piles, Math.floor(Math.random() * (maxStones - 1)) + 1]);
+      setPiles([...piles, { stones: 3 }]);
     }
   };
 
-  const handleRemovePile = (index) => {
-    if (piles.length > 1) {
-      setPiles(piles.filter((_, i) => i !== index));
-    }
+  const removePile = (index) => {
+    setPiles(piles.filter((_, i) => i !== index));
   };
 
-  const handleStoneChange = (index, value) => {
+  const updatePile = (index, stones) => {
     const newPiles = [...piles];
-    newPiles[index] = value;
+    newPiles[index] = { stones: Number(stones) };
     setPiles(newPiles);
   };
 
-  const handleRandomize = () => {
-    const newPiles = piles.map(() => 
-      Math.floor(Math.random() * (maxStones - 1)) + 1
-    );
+  const generateRandomPiles = () => {
+    const numPiles = Math.floor(Math.random() * (maxPiles - 2)) + 2;
+    const newPiles = Array(numPiles).fill(null).map(() => ({
+      stones: Math.floor(Math.random() * (maxStones - 1)) + 1
+    }));
     setPiles(newPiles);
+  };
+
+  const handleStartGame = () => {
+    onStartGame(piles.map(pile => pile.stones));
   };
 
   return (
-    <Box
-      minH="100vh"
-      bg={bgColor}
-      py={8}
-      backgroundImage={useColorModeValue(
-        "radial-gradient(circle at 1px 1px, gray.200 1px, transparent 0)",
-        "radial-gradient(circle at 1px 1px, gray.700 1px, transparent 0)"
-      )}
-      backgroundSize="40px 40px"
-      position="relative"
-    >
-      <Container maxW="7xl">
-        <VStack spacing={8}>
+    <Container maxW="7xl" py={8}>
+      <VStack spacing={8}>
+        <Box variant="game-header" w="full" position="relative">
           <Box
-            p={8}
-            bg={cardBg}
-            borderRadius="2xl"
-            boxShadow="xl"
-            w="full"
-            textAlign="center"
+            position="absolute"
+            top={-6}
+            left="50%"
+            transform="translateX(-50%)"
+            zIndex={1}
           >
-            <VStack spacing={4}>
-              <Heading
-                size="xl"
-                bgGradient="linear(to-r, teal.400, teal.600)"
-                bgClip="text"
-              >
-                Game Setup
-              </Heading>
-              <HStack spacing={2}>
-                <Text fontSize="lg" color={useColorModeValue('gray.600', 'gray.400')}>
-                  Configuring
-                </Text>
-                <Badge
-                  colorScheme="teal"
-                  fontSize="md"
-                  px={3}
-                  py={1}
-                  borderRadius="full"
-                >
-                  {gameType === 'nim' ? 'Classic' : gameType === 'misere' ? 'Misère' : 'Staircase'} Nim
-                </Badge>
-              </HStack>
-              <Tooltip
-                label={
-                  <VStack p={2} spacing={2}>
-                    <Text fontWeight="bold">Game Rules</Text>
-                    <Text>{getGameRules(gameType).description}</Text>
-                    <Text fontStyle="italic" color="teal.200">
-                      {getGameRules(gameType).strategy}
-                    </Text>
-                  </VStack>
-                }
-                placement="bottom"
-                hasArrow
-              >
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  rightIcon={<FaInfoCircle />}
-                  colorScheme="teal"
-                >
-                  View Rules
-                </Button>
-              </Tooltip>
-            </VStack>
+            <Icon as={gameRules.icon} boxSize={12} color="accent.500" />
           </Box>
+          
+          <VStack spacing={4} pt={8}>
+            <Heading variant="game-title" size="xl">
+              {gameRules.title}
+            </Heading>
+            <Text
+              fontSize="lg"
+              color={useColorModeValue('woodBrown.600', 'parchment.200')}
+              maxW="2xl"
+              textAlign="center"
+            >
+              {gameRules.description}
+            </Text>
+          </VStack>
+        </Box>
 
-          <Grid
-            templateColumns={`repeat(${columns}, 1fr)`}
-            gap={6}
-            w="full"
-            px={4}
-          >
-            <AnimatePresence>
-              {piles.map((stones, index) => (
-                <GridItem key={index}>
-                  <PileConfig
-                    index={index}
-                    stones={stones}
-                    onStoneChange={(value) => handleStoneChange(index, value)}
-                    onRemove={() => handleRemovePile(index)}
-                    maxStones={maxStones}
-                  />
-                </GridItem>
-              ))}
-            </AnimatePresence>
-          </Grid>
-
-          <Box
-            p={6}
-            bg={cardBg}
-            borderRadius="xl"
-            boxShadow="lg"
-            w="full"
-            position="sticky"
-            bottom={4}
-          >
-            <HStack spacing={4} justify="center">
-              <Tooltip label={piles.length >= maxPiles ? 'Maximum piles reached' : 'Add new pile'}>
-                <IconButton
-                  icon={<FaPlus />}
-                  onClick={handleAddPile}
-                  isDisabled={piles.length >= maxPiles}
-                  colorScheme="teal"
-                  variant="outline"
-                  size="lg"
+        <Grid templateColumns={['1fr', null, 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={6} w="full">
+          <AnimatePresence mode="popLayout">
+            {piles.map((pile, index) => (
+              <GridItem key={index}>
+                <PileConfig
+                  index={index}
+                  stones={pile.stones}
+                  onStoneChange={(value) => updatePile(index, value)}
+                  onRemove={() => removePile(index)}
+                  maxStones={maxStones}
                 />
-              </Tooltip>
-              <Button
-                leftIcon={<FaDice />}
-                onClick={handleRandomize}
-                colorScheme="purple"
-                variant="outline"
-                size="lg"
-              >
-                Randomize
-              </Button>
-              <Button
-                as={motion.button}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                rightIcon={<FaArrowRight />}
-                onClick={() => onStartGame(piles)}
-                colorScheme="teal"
-                size="lg"
-              >
-                Start Game
-              </Button>
-            </HStack>
-          </Box>
-        </VStack>
-      </Container>
-    </Box>
+              </GridItem>
+            ))}
+          </AnimatePresence>
+        </Grid>
+
+        <HStack spacing={4} justify="center" pt={4}>
+          <Tooltip label="Add New Pile" placement="top">
+            <Button
+              leftIcon={<FaPlus />}
+              onClick={addPile}
+              isDisabled={piles.length >= maxPiles}
+              variant="game-secondary"
+            >
+              Add Pile
+            </Button>
+          </Tooltip>
+          
+          <Tooltip label="Generate Random Setup" placement="top">
+            <Button
+              leftIcon={<FaDice />}
+              onClick={generateRandomPiles}
+              variant="game-secondary"
+            >
+              Random Setup
+            </Button>
+          </Tooltip>
+        </HStack>
+
+        <Button
+          size="lg"
+          rightIcon={<FaPlay />}
+          onClick={handleStartGame}
+          variant="game-primary"
+          w={["full", "auto"]}
+          px={12}
+          isDisabled={piles.length < 2}
+        >
+          Start Game
+        </Button>
+      </VStack>
+    </Container>
   );
 };
 
