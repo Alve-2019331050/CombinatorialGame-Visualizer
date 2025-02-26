@@ -19,8 +19,8 @@ import { GiStoneStack } from 'react-icons/gi';
 import { useState } from 'react';
 
 const StoneIcon = ({ isSelected, isDisabled, onClick }) => {
-  const stoneColor = useColorModeValue('teal.500', 'teal.300');
-  const hoverColor = useColorModeValue('red.500', 'red.300');
+  const stoneColor = useColorModeValue('woodBrown.500', 'woodBrown.300');
+  const hoverColor = useColorModeValue('cyan.500', 'cyan.300');
   const disabledColor = useColorModeValue('gray.300', 'gray.600');
 
   return (
@@ -46,9 +46,9 @@ const StoneIcon = ({ isSelected, isDisabled, onClick }) => {
 };
 
 const PileDisplay = ({ index, stones, selectedStones, onStoneClick, isActive, currentPlayer }) => {
-  const bgColor = useColorModeValue('white', 'gray.700');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const activeBorderColor = useColorModeValue('teal.500', 'teal.300');
+  const bgColor = useColorModeValue('parchment.50', 'woodBrown.800');
+  const borderColor = useColorModeValue('woodBrown.200', 'woodBrown.700');
+  const activeBorderColor = useColorModeValue('woodBrown.700', 'parchment.100');
 
   return (
     <Box
@@ -71,7 +71,7 @@ const PileDisplay = ({ index, stones, selectedStones, onStoneClick, isActive, cu
       <VStack spacing={4}>
         <HStack spacing={2} justify="space-between" w="full">
           <Badge
-            colorScheme={stones === 0 ? 'gray' : 'teal'}
+            colorScheme={stones === 0 ? 'gray' : 'woodBrown'}
             fontSize="md"
             px={3}
             py={1}
@@ -80,7 +80,7 @@ const PileDisplay = ({ index, stones, selectedStones, onStoneClick, isActive, cu
             Pile {index + 1}
           </Badge>
           <Badge
-            colorScheme={stones === 0 ? 'red' : 'green'}
+            colorScheme={stones === 0 ? 'red' : 'woodBrown'}
             variant="subtle"
             fontSize="sm"
           >
@@ -227,7 +227,7 @@ const GameBoard = ({ piles, onMove, currentPlayer, gameType }) => {
             rightIcon={<FaArrowRight />}
             onClick={handleMove}
             isDisabled={selectedStones.length === 0 || currentPlayer !== 'player'}
-            colorScheme="teal"
+            variant="game-primary"
             size="lg"
           >
             Remove {selectedStones.length} {selectedStones.length === 1 ? 'Stone' : 'Stones'}

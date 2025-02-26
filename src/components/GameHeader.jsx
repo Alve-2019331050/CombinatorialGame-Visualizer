@@ -86,8 +86,7 @@ const GameHeader = ({ gameType, currentPlayer, onReset }) => {
         <Button
           as={motion.button}
           leftIcon={<FaRedo />}
-          colorScheme="green"
-          // variant="outline"
+          variant="game-primary"
           onClick={onReset}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
