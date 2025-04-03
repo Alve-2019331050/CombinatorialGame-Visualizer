@@ -23,7 +23,7 @@ You can take turns against the computer and give your move by removing stones fo
 
 ## Tech Stack
 
-- **Frontend:** React, Tailwind CSS, Framer Motion
+- **Frontend:** React, Tailwind CSS
 - **Deployment:** Github Pages
 
 ## Demo
