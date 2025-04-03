@@ -39,7 +39,3 @@ git clone https://github.com/Alve-2019331050/CombinatorialGame-Visualizer.git
 npm install
 npm run dev
 ```
-
-## License
-
-This project is licensed under the MIT License.
